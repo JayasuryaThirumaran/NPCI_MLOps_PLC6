@@ -1,25 +1,45 @@
-import joblib
 import pandas as pd
+import joblib
 
-# Load model and encoders
-model = joblib.load("trained_model/rf_model_term_deposit.pkl")
+# Load trained model
+rf_model = joblib.load("trained_model/rf_model_term_deposit.pkl")
+
+# Load label encoders
 label_encoders = joblib.load("trained_model/label_encoders.pkl")
 
-binary_mapping = {'yes': 1, 'no': 0}
 
-def preprocess_input(data: dict) -> pd.DataFrame:
-    df = pd.DataFrame([data])
-    df['default'] = df['default'].map(binary_mapping)
-    df['housing'] = df['housing'].map(binary_mapping)
-    df['loan'] = df['loan'].map(binary_mapping)
+sample_input = {
+    'age': 33,
+    'job': 'technician',
+    'marital': 'single',
+    'education': 'secondary',
+    'default': 0,
+    'balance': 1500,
+    'housing': 1,
+    'loan': 0,
+    'day_of_week': 'mon',
+    'month': 'may',
+    'duration': 120,
+    'campaign': 2,
+    'pdays': -1,
+    'previous': 0
+}
 
-    for col in ['job', 'marital', 'education', 'day_of_week', 'month']:
-        le = label_encoders[col]
-        df[col] = le.transform(df[col])
+# Apply label encoding
+encoded_input = sample_input.copy()
+for col in ['job', 'marital', 'education', 'day_of_week', 'month']:
+    le = label_encoders[col]
+    encoded_input[col] = le.transform([sample_input[col]])[0] if sample_input[col] in le.classes_ else 0  # fallback
 
-    return df
+# Convert to DataFrame
+sample_input_df = pd.DataFrame(encoded_input, index=[0])
 
-def predict(data: dict):
-    df = preprocess_input(data)
-    prediction = model.predict(df)[0]
-    return prediction
+# Inference function
+def make_prediction(input_df):
+    prediction = rf_model.predict(input_df)[0]
+    label = "Subscribed (y=1)" if prediction == 1 else "Not Subscribed (y=0)"
+    return label
+
+if __name__ == "__main__":
+    pred = make_prediction(sample_input_df)
+    print(pred)
