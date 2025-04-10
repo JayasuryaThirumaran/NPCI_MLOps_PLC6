@@ -1,9 +1,7 @@
 from data_preprocessing import X_train, X_test, y_train, y_test, label_encoders
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-import joblib
-import mlflow
-import os
+
 
 os.makedirs("trained_model", exist_ok=True)
 
