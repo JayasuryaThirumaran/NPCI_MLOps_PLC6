@@ -43,40 +43,41 @@ term_deposit_prediction/
 
 ### 1. Preprocess the Data (`data_preprocessing.py`)
 
-    - Read the CSV file
-    - Handle missing values
-    - Encode categorical columns (label encode and/or mapping)
-    - Split data into train and test sets
-    - Save label encoders in trained_model/
+- Read the CSV file
+- Handle missing values
+- Encode categorical columns (label encode and/or mapping)
+- Split data into train and test sets
+- Save label encoders in trained_model/
 
 ### 2. Train a Machine Learning Model (`train_model.py`)
 
-    - Load preprocessed train-test data and encoders
-    - Select and train an appropriate classification model (e.g., LogisticRegression, RandomForestClassifier, etc.)
-    - Evaluate the model using metrics like accuracy, precision, recall, and F1-score.
-    - Save the trained model in trained_model/ directory
-    - Log model hyperparameters, performance metrics, trained model, and any other artifact using MLflow for reproducibility and comparison
+- Load preprocessed train-test data and encoders
+- Select and train an appropriate classification model (e.g., LogisticRegression, RandomForestClassifier, etc.)
+- Evaluate the model using metrics like accuracy, precision, recall, and F1-score.
+- Save the trained model in trained_model/ directory
+- Log model hyperparameters, performance metrics, trained model, and any other artifact using MLflow for reproducibility and comparison
 
 ### 3. Make Predictions - Inference (`predict.py`)
 
-    - Load the trained model and label encoders
-    - Create a reusable inference function that takes new customer data, preprocess it, make prediction, and returns the predicted subscription outcome: "Subscribed (y=1)" or "Not Subscribed (y=0)"
+- Load the trained model and label encoders
+- Create a reusable inference function that takes new customer data, preprocess it, make prediction, and returns the predicted subscription outcome: `"Subscribed (y=1)"` or `"Not Subscribed (y=0)"`
 
 ### 4. Build Test Cases (`test/test_prediction.py`)
 
-    - Write unit tests to verify:
-      - Accuracy > 80%
-      - Prediction function output validation
-      - Existence of trained model and encoders
-    - Use tools like `pytest`
+- Write unit tests to verify:
+  - Accuracy > 80%
+  - Prediction function output validation
+  - Existence of trained model and encoders
+- Use tools like `pytest`
 
 ### 5. Serve the Model via REST API using FastAPI (`app.py`)
 
-    - Build a FastAPI application with a `/predict` endpoint
-    - Accept customer input data in JSON format and return prediction results in real-time
-    - Start the FastAPI application and make a prediction
+- Build a FastAPI application with a `/predict` endpoint
+- Accept customer input data in JSON format and return prediction results in real-time
+- Start the FastAPI application and make a prediction
 
 ### 6. Dockerize the FastAPI Application
+
 - **Create a Dockerfile:** Write a `Dockerfile` to containerize the FastAPI application.
 
   The Dockerfile will include:
