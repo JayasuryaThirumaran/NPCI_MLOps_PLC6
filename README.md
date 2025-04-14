@@ -1,5 +1,5 @@
 # MLOps Playground Challenge-6
-# Term Deposit Subscription Prediction
+## Term Deposit Subscription Prediction
 
 ## Problem Statement:
 In this project, you'll work with a real-world banking dataset to build a complete machine learning pipeline for predicting whether a customer will subscribe to a term deposit. The project is structured into modular steps that reflect a real industry workflow, from raw data handling to serving predictions through a REST API, followed by containerizing the application for deployment.
@@ -19,7 +19,7 @@ Build and structure a modular ML project with:
 
 
 ## Folder Structure
-
+```
 term_deposit_prediction/
 │
 ├── dataset/
@@ -37,34 +37,55 @@ term_deposit_prediction/
 ├── app.py
 ├── README.md
 └── requirements.txt
-
+```
 
 ## Tasks:
 
-### Preprocess the Data (data_preprocessing.py)
-- Read the CSV file
-- Handle missing values
-- Encode categorical columns (label encode and/or mapping)
-- Split data into train and test sets
-- Save label encoders in trained_model/
+### 1. Preprocess the Data (`data_preprocessing.py`)
 
-### Data Preprocessing
+    - Read the CSV file
+    - Handle missing values
+    - Encode categorical columns (label encode and/or mapping)
+    - Split data into train and test sets
+    - Save label encoders in trained_model/
 
-    - Load CSV data into pandas dataframe
-    - handle nill and missing values
-    - Encode categorical variables
-    - Train-test split
+### 2. Train a Machine Learning Model (`train_model.py`)
 
-### Model Training
-    -  train diffrent classification models (e.g., Logistic Regression, Random Forest)
-    -  Save the trained model
+    - Load preprocessed train-test data and encoders
+    - Select and train an appropriate classification model (e.g., LogisticRegression, RandomForestClassifier, etc.)
+    - Evaluate the model using metrics like accuracy, precision, recall, and F1-score.
+    - Save the trained model in trained_model/ directory
+    - Log model hyperparameters, performance metrics, trained model, and any other artifact using MLflow for reproducibility and comparison
 
-### Experiment Tracking with MLflow
-    -  Log metrics, parameters, and model artifacts
-    - Track different model runs for comparison
+### 3. Make Predictions - Inference (`predict.py`)
 
-### Unit Testing with Pytest
-    -  Create tests for each stage (data loading, preprocessing, training)
-    -  Ensure pipeline robustness
+    - Load the trained model and label encoders
+    - Create a reusable inference function that takes new customer data, preprocess it, make prediction, and returns the predicted subscription outcome: "Subscribed (y=1)" or "Not Subscribed (y=0)"
 
-### FastAPI
+### 4. Build Test Cases (`test/test_prediction.py`)
+
+    - Write unit tests to verify:
+      - Accuracy > 80%
+      - Prediction function output validation
+      - Existence of trained model and encoders
+    - Use tools like `pytest`
+
+### 5. Serve the Model via REST API using FastAPI (`app.py`)
+
+    - Build a FastAPI application with a `/predict` endpoint
+    - Accept customer input data in JSON format and return prediction results in real-time
+    - Start the FastAPI application and make a prediction
+
+### 6. Dockerize the FastAPI Application
+- **Create a Dockerfile:** Write a `Dockerfile` to containerize the FastAPI application.
+
+  The Dockerfile will include:
+  - Base image with Python dependencies.
+  - Installation of necessary libraries (FastAPI, scikit-learn, etc.).
+  - Exposing the appropriate port for FastAPI.
+  - Command to run the FastAPI app inside the container.
+
+- **Build the Docker Image:** Run the `docker build` command to create a Docker image from the `Dockerfile`.
+
+- **Run the Container:** Start a Docker container using the built image and run the FastAPI application, ensuring that the API is accessible and functioning as expected.
+
