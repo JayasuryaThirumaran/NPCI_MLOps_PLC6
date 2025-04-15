@@ -82,6 +82,7 @@ term_deposit_prediction/
 
   The Dockerfile will include:
   - Base image with Python dependencies.
+  - Adding necessary files.
   - Installation of necessary libraries (FastAPI, scikit-learn, etc.).
   - Exposing the appropriate port for FastAPI.
   - Command to run the FastAPI app inside the container.
