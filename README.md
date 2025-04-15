@@ -41,7 +41,7 @@ term_deposit_prediction/
 
 ## Tasks:
 
-### 1. Preprocess the Data (`data_preprocessing.py`)
+### 1. Preprocess the Data (`data_preprocessing.py`) [2 Marks]
 
 - Read the CSV file
 - Handle missing values
@@ -49,7 +49,7 @@ term_deposit_prediction/
 - Split data into train and test sets
 - Save label encoders in trained_model/
 
-### 2. Train a Machine Learning Model (`train_model.py`)
+### 2. Train a Machine Learning Model (`train_model.py`) [4 Marks]
 
 - Load preprocessed train-test data and encoders
 - Select and train an appropriate classification model (e.g., LogisticRegression, RandomForestClassifier, etc.)
@@ -57,12 +57,12 @@ term_deposit_prediction/
 - Save the trained model in trained_model/ directory
 - Log model hyperparameters, performance metrics, trained model, and any other artifact using MLflow for reproducibility and comparison
 
-### 3. Make Predictions - Inference (`predict.py`)
+### 3. Make Predictions - Inference (`predict.py`) [2 Marks]
 
 - Load the trained model and label encoders
 - Create a reusable inference function that takes new customer data, preprocess it, make prediction, and returns the predicted subscription outcome: `"Subscribed (y=1)"` or `"Not Subscribed (y=0)"`
 
-### 4. Build Test Cases (`test/test_prediction.py`)
+### 4. Build Test Cases (`test/test_prediction.py`) [4 Marks]
 
 - Write unit tests to verify:
   - Accuracy > 80%
@@ -70,13 +70,13 @@ term_deposit_prediction/
   - Existence of trained model and encoders
 - Use tools like `pytest`
 
-### 5. Serve the Model via REST API using FastAPI (`app.py`)
+### 5. Serve the Model via REST API using FastAPI (`app.py`) [4 Marks]
 
 - Build a FastAPI application with a `/predict` endpoint
 - Accept customer input data in JSON format and return prediction results in real-time
 - Start the FastAPI application and make a prediction
 
-### 6. Dockerize the FastAPI Application
+### 6. Dockerize the FastAPI Application [4 Marks]
 
 - **Create a Dockerfile:** Write a `Dockerfile` to containerize the FastAPI application.
 

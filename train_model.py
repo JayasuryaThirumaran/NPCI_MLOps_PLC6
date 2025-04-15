@@ -5,11 +5,13 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 import os
 
 
-# Initialize and train the Random Forest model
+## Initialize and train the Random Forest model
 n_estimators = 100
 max_depth = 9
 max_features = 7
 random_state = 42
+
+# rf_model = # YOUR CODE HERE to instantiate a RandomForestClassifier and train it
 
 rf_model = RandomForestClassifier(
     n_estimators = n_estimators, 
@@ -40,10 +42,16 @@ evaluate_model(y_test, y_pred)
 
 # Training and testing accuracy
 training_acc = accuracy_score(rf_model.predict(X_train), y_train)
+# testing_acc = # YOUR CODE HERE to calculate the testing accuracy
 testing_acc = accuracy_score(rf_model.predict(X_test), y_test)
 
-# Save trained model
+# Create `trained_model` if it doesn't exists
 os.makedirs("trained_model", exist_ok=True)
+
+## Save the `rf_model` as a pickle file at path "trained_model/rf_model_term_deposit.pkl"
+# import joblib
+# YOUR CODE HERE
+# print("\n Model saved at: trained_model/rf_model_term_deposit.pkl")
 joblib.dump(rf_model, "trained_model/rf_model_term_deposit.pkl")
 print("\n Model saved at: trained_model/rf_model_term_deposit.pkl")
 
@@ -52,16 +60,23 @@ print("\n Model saved at: trained_model/rf_model_term_deposit.pkl")
 
 import mlflow
 
-# Log parameters
+## Log parameters - n_estimators, max_depth, max_features, random_state
+# mlflow.log_param("n_estimators", n_estimators)
+# YOUR CODE HERE
+# YOUR CODE HERE
+# YOUR CODE HERE
 mlflow.log_param("n_estimators", n_estimators)
 mlflow.log_param("max_depth", max_depth)
 mlflow.log_param("max_features", max_features)
 mlflow.log_param("random_state", random_state)
 
-# Log metrics
+## Log metrics - training_accuracy, testing_accuracy
+# mlflow.log_metric("training_accuracy", training_acc)
+# YOUR CODE HERE
 mlflow.log_metric("training_accuracy", training_acc)
 mlflow.log_metric("testing_accuracy", testing_acc)
 
-# Log model  
+# Log model
 # Ignore the WARNING saying `Model logged without a signature and input example.`
+# YOUR CODE HERE
 mlflow.sklearn.log_model(rf_model, "term-deposit-pred-model")

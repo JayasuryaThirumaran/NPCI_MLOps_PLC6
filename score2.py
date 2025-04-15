@@ -68,6 +68,6 @@ def evaluate_submission(submission_path):
 
 if __name__ == "__main__":
     # Path to the student's submission directory
-    student_submission_path = 'path/to/student/submission'
+    student_submission_path = '.'
     evaluate_submission(student_submission_path)
 

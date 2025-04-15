@@ -1,7 +1,8 @@
 import pandas as pd
 import joblib
 
-# Load trained model
+## Load trained model
+# rf_model = # YOUR CODE HERE to load the model from path "trained_model/rf_model_term_deposit.pkl"
 rf_model = joblib.load("trained_model/rf_model_term_deposit.pkl")
 
 # Load label encoders
@@ -37,6 +38,7 @@ sample_input_df = pd.DataFrame(encoded_input, index=[0])
 # Inference function
 def make_prediction(input_df):
     prediction = rf_model.predict(input_df)[0]
+    # YOUR CODE HERE to return "Subscribed (y=1)" if prediction == 1 else "Not Subscribed (y=0)"
     label = "Subscribed (y=1)" if prediction == 1 else "Not Subscribed (y=0)"
     return label
 
