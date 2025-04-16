@@ -14,7 +14,7 @@ ADD requirements/*.txt requirements/
 RUN pip install -r requirements/api_requirements.txt
 
 # Copy all Python files from the current directory on the host to the current directory in the container
-ADD *.py .
+ADD *.py ./
 
 # Expose port 8080 to allow external access to the application running in the container
 EXPOSE 8080
