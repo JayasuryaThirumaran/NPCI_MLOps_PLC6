@@ -60,7 +60,7 @@ term_deposit_prediction/
 ### 3. Make Predictions - Inference (`predict.py`) [2 Marks]
 
 - Load the trained model and label encoders
-- Create a reusable inference function that takes new customer data, preprocess it, make prediction, and returns the predicted subscription outcome: `"Subscribed (y=1)"` or `"Not Subscribed (y=0)"`
+- Create a reusable inference function that takes new customer data, preprocess it, make prediction, and returns the predicted subscription outcome: `"Subscribe (y=1)"` or `"Not Subscribe (y=0)"`
 
 ### 4. Build Test Cases (`test/test_prediction.py`) [4 Marks]
 

@@ -38,8 +38,8 @@ sample_input_df = pd.DataFrame(encoded_input, index=[0])
 # Inference function
 def make_prediction(input_df):
     prediction = rf_model.predict(input_df)[0]
-    # YOUR CODE HERE to return "Subscribed (y=1)" if prediction == 1 else "Not Subscribed (y=0)"
-    label = "Subscribed (y=1)" if prediction == 1 else "Not Subscribed (y=0)"
+    # YOUR CODE HERE to return "Subscribe (y=1)" if prediction == 1 else "Not Subscribe (y=0)"
+    label = "Subscribe (y=1)" if prediction == 1 else "Not Subscribe (y=0)"
     return label
 
 if __name__ == "__main__":

@@ -15,7 +15,7 @@ from sklearn.metrics import accuracy_score
 #     assert False  # <-- ADD YOUR ASSERT STATEMENT and remove `False``
 
 # def test_make_prediction_function():
-#     # ADD YOUR TEST CASE to check the output from make_prediction(), should be either "Subscribed (y=1)", or "Not Subscribed (y=0)"
+#     # ADD YOUR TEST CASE to check the output from make_prediction(), should be either "Subscribe (y=1)", or "Not Subscribe (y=0)"
 #     assert False  # <-- ADD YOUR ASSERT STATEMENT and remove `False``
 
 
@@ -27,4 +27,4 @@ def test_model_accuracy():
 
 def test_make_prediction_function():
     label = make_prediction(sample_input_df)
-    assert label in ["Subscribed (y=1)", "Not Subscribed (y=0)"], "ErrorMessage: mismatch in prediction label sting"
+    assert label in ["Subscribe (y=1)", "Not Subscribe (y=0)"], "ErrorMessage: mismatch in prediction label sting"

@@ -33,7 +33,7 @@ if encoder_file.is_file():
 else:
     print("[ERROR]: `trained_model/label_encoders.pkl` <-- FILE DOES NOT EXIST")
 
-print("--------- Train a Machine Learning Model (`train_model.py`) [4 Marks] ---------")
+print("\n--------- Train a Machine Learning Model (`train_model.py`) [4 Marks] ---------")
 
 model_file = Path(str(root) + "/" + "trained_model/rf_model_term_deposit.pkl")
 
@@ -96,7 +96,7 @@ else:
 
 
 # Evaluate Inference - predict.py
-print("--------- Make Predictions - Inference (`predict.py`) [2 Marks] ---------")
+print("\n--------- Make Predictions - Inference (`predict.py`) [2 Marks] ---------")
 
 # Check for `predict.py`
 try:
@@ -105,23 +105,25 @@ try:
     print("Points given for loading the model pkl: 1")
 except:
     pass
+    print("[ERROR]: Model not loaded in predict.py")
 
 try:
     from predict import make_prediction, sample_input_df
     sample_pred = make_prediction(sample_input_df)
-    if sample_pred in ["Subscribed (y=1)", "Not Subscribed (y=0)"]:
+    if sample_pred in ["Subscribe (y=1)", "Not Subscribe (y=0)"]:
         score += 1
         print("Points given for make_prediction() func: 1")
 except:
     pass
+    print("[ERROR]: make_prediction() function not completed in predict.py")
 
 
 # Evaluate pytest tests
-print("--------- Build Test Cases (`test/test_prediction.py`) [4 Marks] ---------")
+print("\n--------- Build Test Cases (`test/test_prediction.py`) [4 Marks] ---------")
 
 # Check for test_model_accuracy() test case:
 try:
-    result = subprocess.run(['pytest', 'tests/test_prediction.py::test_model_accuracy'], capture_output=True, text=True)
+    result = subprocess.run(['python3', '-m', 'pytest', 'tests/test_prediction.py::test_model_accuracy'], capture_output=True, text=True)
     #print(result.stdout)
     #print(result.stderr)
     if result.returncode == 0:
@@ -135,7 +137,7 @@ except Exception as e:
 
 # Check for test_make_prediction() test case:
 try:
-    result = subprocess.run(['pytest', 'tests/test_prediction.py::test_make_prediction_function'], capture_output=True, text=True)
+    result = subprocess.run(['python3', '-m', 'pytest', 'tests/test_prediction.py::test_make_prediction_function'], capture_output=True, text=True)
     #print(result.stdout)
     #print(result.stderr)
     if result.returncode == 0:
@@ -148,7 +150,7 @@ except Exception as e:
 
 
 # Serve the Model via REST API using FastAPI (`app.py`) [4 Marks]
-print("--------- Serve the Model via REST API using FastAPI (`app.py`) [4 Marks] ---------")
+print("\n--------- Serve the Model via REST API using FastAPI (`app.py`) [4 Marks] ---------")
 
 try:
     install_httpx = subprocess.run(['pip', 'install', 'httpx'], capture_output=True, text=True)
@@ -177,7 +179,7 @@ try:
 
     response = client.post("/predict", json=payload)
 
-    if response.json()["prediction"] in ["Subscribed (y=1)", "Not Subscribed (y=0)"]:
+    if response.json()["prediction"] in ["Subscribe (y=1)", "Not Subscribe (y=0)"]:
         score += 4
         print("Points given for FastAPI implementation: 4")
     elif response.json()["prediction"] == "Update this variable":
@@ -185,13 +187,13 @@ try:
     else:
         print("[ERROR]: Error in FastAPI implementation `app.py`")
 
-except:
-    print("[ERROR]: Error in FastAPI implementation `app.py`. May be `/predict` endpoint NOT DEFINED")
+except Exception as e:
+    print("[ERROR]: Error in FastAPI implementation `app.py`. ", e)
     pass
 
 
 # Dockerize the FastAPI Application [4 Marks]
-print("--------- Dockerize the FastAPI Application [4 Marks] ---------")
+print("\n--------- Dockerize the FastAPI Application [4 Marks] ---------")
 
 
 # Define the required Dockerfile keywords (some are alternatives)
@@ -271,7 +273,7 @@ def check_container():
     # Run the Docker container
     #print("Running Docker container...")
     try:
-        container = subprocess.Popen(['docker', 'run', '-d', '-p', '8080:8080', 'diamond-clubs'], stdout=subprocess.PIPE)
+        container = subprocess.Popen(['docker', 'run', '-d', '-p', '8085:8080', 'diamond-clubs'], stdout=subprocess.PIPE)
         container_id = container.stdout.read().strip().decode('utf-8')
         #print(f"Container started with ID: {container_id}")
     except Exception as e:
@@ -301,9 +303,9 @@ def check_container():
             'pdays': -1,
             'previous': 0
         }
-        response = requests.post('http://localhost:8080/predict', json=payload)
+        response = requests.post('http://localhost:8085/predict', json=payload)
 
-        if response.json()["prediction"] in ["Subscribed (y=1)", "Not Subscribed (y=0)"]:
+        if response.json()["prediction"] in ["Subscribe (y=1)", "Not Subscribe (y=0)"]:
             score += 1
             print("Points given for successfully running application in docker container: 1")
         elif response.json()["prediction"] == "Update this variable":
@@ -316,6 +318,7 @@ def check_container():
         # Stop and remove the Docker container
         _ = subprocess.run(['docker', 'stop', container_id], capture_output=True, text=True)
         _ = subprocess.run(['docker', 'rm', container_id], capture_output=True, text=True)
+        _ = subprocess.run(['docker', 'rmi', 'diamond-clubs'], capture_output=True, text=True)
 
 
 check_container()
