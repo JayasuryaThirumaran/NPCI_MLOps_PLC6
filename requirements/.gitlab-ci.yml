@@ -1,0 +1,97 @@
+# A pipeline is composed of independent jobs that run scripts, grouped into stages.
+# Stages run in sequential order, but jobs within stages run in parallel.
+# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
+
+
+stages:          # List of stages for jobs, and their order of execution
+  - train
+  - test
+  - build
+  - push-image
+  - deploy
+
+variables:
+  IMG_NAME: titanic-api-img             # docker image name
+  IMG_TAG: latest                       # image tag  
+  CONT_NAME: titanic-api-container      # container name
+
+train-job:
+  stage: train
+  image: python:3.10-slim
+  script:
+    - pip install -r project/requirements/requirements.txt    # install requirements
+    - python project/titanic_model/train_pipeline.py          # run training script
+  artifacts:
+    paths:
+      - project/titanic_model/trained_models/*.pkl            # save trained model pipeline as artifact
+    expire_in: 24 hour
+
+
+pytest-job:
+  stage: test
+  image: python:3.10-slim
+  needs:
+    - train-job
+  script:
+    - pip install -r project/requirements/test_requirements.txt      # install test requirements
+    - pytest     # run test cases
+
+
+build-job:
+  stage: build
+  image: python:3.10-slim
+  needs:                     # run this job only when above jobs are completed susseccfully
+    - train-job
+    - pytest-job
+  script:
+    - pip install --upgrade build         # install build package
+    - cd project && python -m build       # create .whl file
+  artifacts:
+    paths:
+      - project/dist/*.whl                # save .whl file as artifact
+    expire_in: 24 hour
+
+
+push-image-job:
+  stage: push-image
+  needs:
+    - build-job
+  tags:
+    - self-hosted
+  script:    
+    - echo "Move the .whl file"
+    - mv project/dist/*.whl project/titanic_model_api/
+    
+    - echo "Login to Gitlab container registry"
+    - docker login -u $DOCKER_USER_NAME -p $DOCKER_PASS_TOKEN
+    
+    - echo "Build the docker image"
+    - docker build project/. -f project/Dockerfile -t $DOCKER_USER_NAME/$IMG_NAME:$IMG_TAG
+    
+    - echo "Push the docker image"
+    - docker push $DOCKER_USER_NAME/$IMG_NAME:$IMG_TAG
+    
+
+deploy-job:
+  stage: deploy
+  environment: production
+  needs:
+    - push-image-job
+  tags:
+    - self-hosted
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."
+    
+    - echo "Pull Docker Image"
+    - docker pull $DOCKER_USER_NAME/$IMG_NAME:$IMG_TAG
+
+    - echo "Delete Old Docker Container"
+    - docker rm -f $CONT_NAME || true
+
+    - echo "Run Docker Container"
+    - docker run -it -d -p 8001:8001 --name=$CONT_NAME $DOCKER_USER_NAME/$IMG_NAME:$IMG_TAG
+
+    - echo "Check the running Container"
+    - docker ps
+    
